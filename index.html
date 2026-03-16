@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artemyx Labs — AI Platform Services</title>
+<meta name="description" content="AI-native software development, managed services, and venture partnerships. From discovery to production — and beyond.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300D4AA'/%3E%3Cstop offset='100%25' stop-color='%230077FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M23,120 L70,18 L117,120' stroke='url(%23g)' stroke-width='7' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M41,82 L99,82' stroke='url(%23g)' stroke-width='7' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='70' cy='18' r='8' fill='%2300D4AA'/%3E%3Ccircle cx='23' cy='120' r='6.5' fill='%230077FF'/%3E%3Ccircle cx='117' cy='120' r='6.5' fill='%230077FF'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #F5F5F7; color: #1A1A2E; }
+  ::selection { background: #00B8CC; color: #fff; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes pulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.6; } }
+  @keyframes gridPulse { 0%, 100% { opacity: 0.025; } 50% { opacity: 0.045; } }
+  .nav-link:hover { color: #00B8CC !important; }
+  .case-card { transition: all 0.3s cubic-bezier(0.16,1,0.3,1) !important; }
+  .case-card:hover { transform: translateY(-5px) !important; box-shadow: 0 16px 48px rgba(0,184,204,0.10), 0 2px 8px rgba(0,0,0,0.04) !important; }
+  .case-card:hover .card-arrow { transform: translateX(5px) !important; }
+  .cap-card:hover { border-color: #00B8CC !important; background: linear-gradient(135deg, rgba(0,212,170,0.04) 0%, rgba(0,119,255,0.03) 100%) !important; }
+  .gradient-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .outline-btn:hover { background: rgba(0,184,204,0.06) !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const T = {
+  bg: "#F5F5F7", bgSoft: "#EDEDF0", ink: "#1A1A2E", inkSoft: "#2D2D44",
+  muted: "#6B7280", mutedLight: "#9CA3AF", rule: "#E5E7EB", ruleSoft: "#F0F1F3",
+  teal: "#00D4AA", midTeal: "#00B8CC", blue: "#0077FF",
+  darkBg: "#0B1120", lightText: "#E2E8F0",
+  gradient: "linear-gradient(135deg, #00D4AA 0%, #0077FF 100%)",
+  gradientSubtle: "linear-gradient(135deg, rgba(0,212,170,0.08) 0%, rgba(0,119,255,0.06) 100%)",
+  gradientCard: "linear-gradient(135deg, rgba(0,212,170,0.04) 0%, rgba(0,119,255,0.03) 100%)",
+};
+
+function ArtemyxIcon({ size = 40, id = "iconG" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 140 140" fill="none">
+      <defs><linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#00D4AA"/><stop offset="100%" stopColor="#0077FF"/></linearGradient></defs>
+      <polygon points="70,4 123,35 123,100 70,131 17,100 17,35" fill="none" stroke={`url(#${id})`} strokeWidth="3.5" opacity="0.25"/>
+      <line x1="47" y1="50" x2="70" y2="18" stroke="#00D4AA" strokeWidth="2.5" opacity="0.3"/>
+      <line x1="93" y1="50" x2="70" y2="18" stroke="#00D4AA" strokeWidth="2.5" opacity="0.3"/>
+      <line x1="47" y1="50" x2="41" y2="82" stroke="#00B8CC" strokeWidth="2.5" opacity="0.3"/>
+      <line x1="93" y1="50" x2="99" y2="82" stroke="#00B8CC" strokeWidth="2.5" opacity="0.3"/>
+      <path d="M23,120 L70,18 L117,120" stroke={`url(#${id})`} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <path d="M41,82 L99,82" stroke={`url(#${id})`} strokeWidth="7" strokeLinecap="round" fill="none"/>
+      <circle cx="70" cy="18" r="8" fill="#00D4AA"/><circle cx="23" cy="120" r="6.5" fill="#0077FF"/><circle cx="117" cy="120" r="6.5" fill="#0077FF"/>
+      <circle cx="41" cy="82" r="5.5" fill="#00B8CC"/><circle cx="99" cy="82" r="5.5" fill="#00B8CC"/>
+      <circle cx="47" cy="50" r="3.5" fill="#00D4AA" opacity="0.6"/><circle cx="93" cy="50" r="3.5" fill="#00D4AA" opacity="0.6"/>
+    </svg>
+  );
+}
+
+function ArtemyxWordmark({ dark = false, size = "md" }) {
+  const sizes = { sm: { main: 17, labs: 9, lsp: 2.5, llsp: 7 }, md: { main: 22, labs: 11, lsp: 2.5, llsp: 8 } };
+  const s = sizes[size]; const tc = dark ? T.lightText : T.ink;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: s.main, letterSpacing: s.lsp, textTransform: "uppercase", lineHeight: 1.1 }}>
+        <span style={{ color: tc }}>ARTEM</span><span style={{ background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Y</span><span style={{ color: tc }}>X</span>
+      </div>
+      <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: s.labs, letterSpacing: s.llsp, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", opacity: 0.8 }}>LABS</div>
+    </div>
+  );
+}
+
+function Reveal({ children, delay = 0, style: extra = {} }) {
+  const [vis, setVis] = useState(false); const ref = useRef(null);
+  useEffect(() => { const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.12 }); if (ref.current) o.observe(ref.current); return () => o.disconnect(); }, []);
+  return <div ref={ref} style={{ opacity: vis ? 1 : 0, transform: vis ? "translateY(0)" : "translateY(28px)", transition: `all 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`, ...extra }}>{children}</div>;
+}
+
+function GradientButton({ children, href, onClick, variant = "solid", style: ex = {} }) {
+  const base = { fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", padding: "14px 32px", border: "none", cursor: "pointer", textDecoration: "none", display: "inline-block", transition: "all 0.25s ease" };
+  const solid = { ...base, background: T.gradient, color: "#fff", borderRadius: 0, ...ex };
+  const outline = { ...base, background: "transparent", color: T.midTeal, border: `1.5px solid ${T.midTeal}`, ...ex };
+  const s = variant === "solid" ? solid : outline;
+  const cn = variant === "solid" ? "gradient-btn" : "outline-btn";
+  if (href) return <a href={href} style={s} className={cn}>{children}</a>;
+  return <button onClick={onClick} style={s} className={cn}>{children}</button>;
+}
+
+function SectionLabel({ children }) {
+  return <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 12 }}>{children}</div>;
+}
+
+const caseStudies = [
+  {
+    id: "hypetix", title: "HypeTix", subtitle: "White-Label SaaS Ticketing Platform",
+    hero: "Multi-tenant ticketing for seasonal attractions handling 25,000 concurrent users with offline-first scanning and single-page checkout.",
+    trackLabel: "Build + Run", tags: ["SaaS", "Multi-Tenant", "Stripe Connect", "PWA", "Real-Time"],
+    stats: [
+      { label: "Cart Abandonment Reduction", value: "41% → <15%", detail: "Single-page checkout" },
+      { label: "Concurrent Users", value: "25,000", detail: "Load tested capacity" },
+      { label: "Capacity Accuracy", value: "<60s", detail: "Fire marshal compliance" },
+      { label: "Database Tables w/ RLS", value: "20+", detail: "Complete tenant isolation" },
+    ],
+    challenge: "Fritzler Farm Park was losing tens of thousands in revenue through a 4-page checkout flow with 41% cart abandonment, an offline-incapable scanner app failing at rural locations, and a single-tenant architecture that couldn't scale to their network of farm park operators.",
+    solution: "We built a white-label, multi-tenant SaaS platform from the ground up with a single-page checkout, offline-first PWA scanner with IndexedDB caching, fee-inclusive pricing for regulatory compliance, and Stripe Connect for automatic multi-tenant payment splitting.",
+    innovations: [
+      { name: "Single-Page Checkout", desc: "Reduced 4 pages to 1, targeting sub-2-minute completion with ticket selection, customer info, and payment in a single view." },
+      { name: "Offline-First Scanner", desc: "PWA pre-loads all tickets on launch, validates against local IndexedDB cache, queues redemptions offline, and background-syncs every 30 seconds." },
+      { name: "Fee-Inclusive Pricing", desc: "All displayed prices include the configurable 3-5% platform fee, ensuring Fee Transparency Act compliance from day one." },
+      { name: "Real-Time Capacity", desc: "Sub-60-second accuracy for fire marshal occupancy limits with automatic availability updates reflected in checkout." },
+    ],
+    phases: [
+      { num: "01", title: "MVP Foundation", detail: "Multi-tenant schema, RLS on 20+ tables, Stripe Connect, single-page checkout, admin dashboard" },
+      { num: "02", title: "Mobile & Marketing", detail: "PWA scanner with offline caching, QR scanning, SMS broadcast, B2B sales pages, discount codes" },
+      { num: "03", title: "Reporting & Analytics", detail: "Financial reports, attendance analytics, UTM tracking, geographic visualization, refund system" },
+      { num: "04", title: "Launch & Training", detail: "AWS S3 + CloudFront deployment, data migration, staff training, tenant onboarding playbook" },
+    ],
+    techStack: ["React", "Supabase", "Stripe Connect", "PWA", "IndexedDB", "AWS CloudFront", "Recharts"],
+    businessValue: "Revenue model of 3-5% platform fee on all ticket sales. Year 2 pipeline of 12-15 venues through established farm park operator network. Full platform ownership with no recurring licensing fees and white-label potential for agency resale.",
+    lessons: [
+      "Row-Level Security is non-negotiable for multi-tenant SaaS — database-level isolation, not just application filtering.",
+      "Offline-first capability must be architected from day one. Retrofitting it is orders of magnitude harder.",
+      "Building regulatory compliance (Fee Transparency Act) from the start positions the platform ahead of competitors facing costly retrofits.",
+    ],
+  },
+  {
+    id: "nyxai", title: "Nyx AI", subtitle: "AI-Powered Business Management for Fitness Studios",
+    hero: "Dual AI agents automating lead conversion and member retention via SMS, webchat, and email with 37 integrated tools.",
+    trackLabel: "Venture", tags: ["AI/ML", "Conversational AI", "MCP", "Multi-Tenant", "SMS"],
+    stats: [
+      { label: "AI Booking Success", value: "9% → 85%+", detail: "Two-step validation" },
+      { label: "MCP Tools", value: "37", detail: "Deep system integration" },
+      { label: "Sync Optimization", value: "94%", detail: "18hrs → 1.1hrs" },
+      { label: "Application Pages", value: "33", detail: "Full platform scope" },
+    ],
+    challenge: "Fitness businesses lose 78% of leads to competitors who respond first, churn 50% of members annually, and struggle with staff bandwidth stretched across sales, check-ins, and member management. Data lives in disconnected silos with no unified view.",
+    solution: "We built a dual-agent AI system — Selene for lead conversion and Helios for member retention — with 37 MCP tools providing direct read/write access to gym management data, intelligent human escalation, and a member risk scoring algorithm.",
+    innovations: [
+      { name: "AI Hallucination Prevention", desc: "Two-step validated booking requires real-time schedule verification before confirming, improving booking success from 9% to 85%+." },
+      { name: "Dual Agent Architecture", desc: "Selene handles top-of-funnel lead response in under 60 seconds. Helios identifies at-risk members through algorithmic risk scoring (0-100)." },
+      { name: "Fail-Closed Error Handling", desc: "When AI encounters tool errors, it auto-creates staff handoff tasks with full conversation context — no prospect is ever left without a response." },
+      { name: "Sync Optimization", desc: "7-stage parallel processing with bulk deduplication reduced 14,000+ member record sync from 18 hours to 1.1 hours." },
+    ],
+    phases: [
+      { num: "01", title: "Lead Pipeline", detail: "Embeddable webchat, lead capture forms, visual Kanban pipeline, automated follow-up sequences" },
+      { num: "02", title: "AI Agents", detail: "37 MCP tools, two-step booking validation, intelligent escalation, draft approval system" },
+      { num: "03", title: "Retention Engine", detail: "Risk scoring algorithm, at-risk identification, milestone celebrations, 'Members Saved' dashboard" },
+      { num: "04", title: "Campaigns", detail: "AI-generated campaign messages, audience segmentation, A/B testing, campaign analytics" },
+    ],
+    techStack: ["React", "Supabase", "Anthropic Claude", "MCP Protocol", "Twilio SMS", "Edge Functions", "Zen Planner API"],
+    businessValue: "Positioned as an AI-native automation engine for independent gyms — distinct from dashboard-based competitors. Handles lead response before members walk through the door, then extends into retention through the dual-agent architecture.",
+    lessons: [
+      "Function calling validation prevents AI hallucinations far better than prompt engineering alone.",
+      "Fail-closed beats fail-open — system errors should reject and escalate to humans, not silently pass through.",
+      "Human escalation is non-negotiable. The staff handoff system is as critical as the AI itself.",
+    ],
+  },
+  {
+    id: "creator-connections", title: "Creator Connections", subtitle: "Amazon Analytics & Reporting Platform",
+    hero: "Multi-tenant marketing analytics replacing manual data extraction with automated dashboards and custom report builders.",
+    trackLabel: "Build + Run", tags: ["Analytics", "Multi-Tenant", "Automation", "Reporting", "Data Pipeline"],
+    stats: [
+      { label: "Dashboard Load", value: "<2s", detail: "Pre-aggregated metrics" },
+      { label: "Report Columns", value: "16+", detail: "Custom report builder" },
+      { label: "UI Components", value: "50+", detail: "shadcn/ui architecture" },
+      { label: "Custom Hooks", value: "18", detail: "Domain-organized" },
+    ],
+    challenge: "Versa Marketing was manually extracting Amazon Creator Connections data from Seller Central, tracking campaigns across disconnected spreadsheets, with no unified dashboard for KPIs and no self-service reporting option for clients.",
+    solution: "We built a multi-tenant analytics platform with automated data ingestion from Amazon Seller Central, real-time dashboards with 6 key metrics, and a custom report builder with 16+ selectable columns and CSV export.",
+    innovations: [
+      { name: "Automated Data Pipeline", desc: "Node.js automation service on Render scrapes Amazon Seller Central, parses and transforms raw data, and uploads to Supabase on configurable schedules." },
+      { name: "Dual-Table Strategy", desc: "Pre-aggregated campaign_summary table for instant dashboard rendering, with full raw dataset loaded lazily only when custom reports are accessed." },
+      { name: "Custom Report Builder V2", desc: "16+ selectable columns, dynamic reordering, advanced visual FilterBuilder, and CSV export — built after V1 was validated and replaced." },
+      { name: "Multi-Tenant from Day One", desc: "Company > Program hierarchy with Row-Level Security policies ensuring complete data isolation while allowing agency cross-tenant visibility." },
+    ],
+    phases: [
+      { num: "01", title: "Data Architecture", detail: "Multi-tenant schema, RLS policies, Company > Program hierarchy, Supabase integration" },
+      { num: "02", title: "Analytics Dashboard", detail: "6 KPI cards, campaign selector, date range presets, trend charts, top campaigns ranking" },
+      { num: "03", title: "Reporting System", detail: "Standard reports (Campaign, ASIN, Creator, Time), custom report builder V2, CSV export" },
+      { num: "04", title: "Automation", detail: "Render-hosted Node.js pipeline, configurable scheduling, progress tracking, import history" },
+    ],
+    techStack: ["React", "Supabase", "Node.js", "Render", "Recharts", "shadcn/ui", "TanStack Virtual", "Vitest"],
+    businessValue: "Eliminated manual reporting workflows, enabling Versa Marketing to scale their Amazon Creator Connections practice. Full platform ownership with extensible architecture ready for additional data sources and white-label potential.",
+    lessons: [
+      "Pre-aggregation is critical for dashboard speed — separate summary tables alongside raw data prevent reporting from degrading the core experience.",
+      "Without a formal API, scraping pipelines require robust error handling, retry logic, and detailed import logging.",
+      "Ship quickly and iterate — the V1 report builder was replaced entirely by V2 based on real usage patterns.",
+    ],
+  },
+];
+
+function CaseStudyDetail({ study, onClose }) {
+  const [tab, setTab] = useState("overview");
+  const tabs = [{ id: "overview", label: "Overview" }, { id: "solution", label: "Solution" }, { id: "tech", label: "Technical" }, { id: "impact", label: "Impact" }];
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(6,8,14,0.6)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, animation: "fadeIn 0.25s ease" }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bg, maxWidth: 940, width: "100%", maxHeight: "90vh", overflow: "auto", border: `1px solid ${T.rule}`, animation: "slideUp 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
+        <div style={{ padding: "40px 48px 28px", borderBottom: `1px solid ${T.rule}`, background: T.gradientSubtle, position: "relative" }}>
+          <button onClick={onClose} style={{ position: "absolute", top: 16, right: 20, background: "none", border: `1px solid ${T.rule}`, width: 36, height: 36, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: T.muted, fontFamily: "sans-serif" }}>✕</button>
+          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 10 }}>Case Study · {study.trackLabel}</div>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 30, letterSpacing: 1, color: T.ink, marginBottom: 4 }}>{study.title}</h2>
+          <p style={{ fontSize: 16, color: T.muted, fontStyle: "italic" }}>{study.subtitle}</p>
+          <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
+            {study.tags.map(t => <span key={t} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, letterSpacing: 1.5, textTransform: "uppercase", padding: "4px 10px", background: "rgba(0,184,204,0.08)", color: T.midTeal, border: "1px solid rgba(0,184,204,0.15)" }}>{t}</span>)}
+          </div>
+        </div>
+        <div style={{ display: "flex", borderBottom: `1px solid ${T.rule}`, padding: "0 48px" }}>
+          {tabs.map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: 1, padding: "13px 20px", border: "none", background: "none", cursor: "pointer", color: tab === t.id ? T.midTeal : T.muted, borderBottom: tab === t.id ? `2px solid ${T.midTeal}` : "2px solid transparent", transition: "all 0.2s" }}>{t.label}</button>)}
+        </div>
+        <div style={{ padding: "32px 48px 48px" }}>
+          {tab === "overview" && <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginBottom: 32 }}>
+              {study.stats.map((s, i) => <div key={i} style={{ background: T.bg, padding: "18px 14px", textAlign: "center" }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 18, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 4 }}>{s.value}</div>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 500, fontSize: 8, letterSpacing: 1.2, textTransform: "uppercase", color: T.ink, marginBottom: 2 }}>{s.label}</div>
+                <div style={{ fontSize: 10, color: T.muted }}>{s.detail}</div>
+              </div>)}
+            </div>
+            <SectionLabel>The Challenge</SectionLabel>
+            <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft, marginBottom: 28 }}>{study.challenge}</p>
+            <SectionLabel>The Solution</SectionLabel>
+            <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft }}>{study.solution}</p>
+          </div>}
+          {tab === "solution" && <div>
+            <SectionLabel>Key Innovations</SectionLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
+              {study.innovations.map((inn, i) => <div key={i} style={{ padding: 22, border: `1px solid ${T.rule}`, background: T.gradientCard }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: 0.5, color: T.ink, marginBottom: 8 }}>{inn.name}</div>
+                <p style={{ fontSize: 13, lineHeight: 1.6, color: T.muted }}>{inn.desc}</p>
+              </div>)}
+            </div>
+            <SectionLabel>Delivery Phases</SectionLabel>
+            {study.phases.map((p, i) => <div key={i} style={{ display: "grid", gridTemplateColumns: "56px 1fr", gap: 14, padding: "14px 0", borderBottom: i < study.phases.length - 1 ? `1px solid ${T.ruleSoft}` : "none" }}>
+              <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, fontWeight: 500, color: T.midTeal, paddingTop: 2 }}>Phase {p.num}</div>
+              <div><div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 11, color: T.ink, marginBottom: 3 }}>{p.title}</div><p style={{ fontSize: 13, color: T.muted, lineHeight: 1.55 }}>{p.detail}</p></div>
+            </div>)}
+          </div>}
+          {tab === "tech" && <div>
+            <SectionLabel>Technology Stack</SectionLabel>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
+              {study.techStack.map(t => <span key={t} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, padding: "6px 14px", background: T.darkBg, color: T.teal, letterSpacing: 0.8 }}>{t}</span>)}
+            </div>
+            <SectionLabel>Architecture Highlights</SectionLabel>
+            {study.innovations.map((inn, i) => <div key={i} style={{ padding: "18px 22px", marginBottom: 12, borderLeft: `3px solid ${T.midTeal}`, background: T.gradientCard }}>
+              <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 11, color: T.ink, marginBottom: 5 }}>{inn.name}</div>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: T.muted }}>{inn.desc}</p>
+            </div>)}
+          </div>}
+          {tab === "impact" && <div>
+            <SectionLabel>Business Value</SectionLabel>
+            <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft, marginBottom: 32 }}>{study.businessValue}</p>
+            <SectionLabel>Key Lessons</SectionLabel>
+            {study.lessons.map((l, i) => <div key={i} style={{ display: "grid", gridTemplateColumns: "28px 1fr", gap: 10, padding: "14px 0", borderBottom: i < study.lessons.length - 1 ? `1px solid ${T.ruleSoft}` : "none" }}>
+              <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, color: T.midTeal, fontWeight: 500 }}>0{i + 1}</span>
+              <p style={{ fontSize: 14, lineHeight: 1.6, color: T.inkSoft }}>{l}</p>
+            </div>)}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginTop: 32 }}>
+              {study.stats.map((s, i) => <div key={i} style={{ background: T.bg, padding: "16px 12px", textAlign: "center" }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 16, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{s.value}</div>
+                <div style={{ fontSize: 9, color: T.muted, textTransform: "uppercase", letterSpacing: 0.8, marginTop: 2 }}>{s.label}</div>
+              </div>)}
+            </div>
+          </div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [activeStudy, setActiveStudy] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => { const fn = () => setScrolled(window.scrollY > 50); window.addEventListener("scroll", fn); return () => window.removeEventListener("scroll", fn); }, []);
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+  return (
+    <div>
+      {/* NAV */}
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 900, padding: scrolled ? "10px 48px" : "18px 48px", background: scrolled ? "rgba(245,245,247,0.92)" : "transparent", backdropFilter: scrolled ? "blur(16px)" : "none", borderBottom: scrolled ? `1px solid ${T.rule}` : "1px solid transparent", transition: "all 0.3s ease", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }} onClick={() => scrollTo("hero")}>
+          <ArtemyxIcon size={scrolled ? 34 : 42} id="navIcon" />
+          <ArtemyxWordmark size="sm" />
+        </div>
+        <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
+          {["Services", "Portfolio", "About"].map(item => <span key={item} className="nav-link" onClick={() => scrollTo(item.toLowerCase())} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: T.muted, cursor: "pointer", transition: "color 0.2s" }}>{item}</span>)}
+          <GradientButton href="mailto:hello@artemyxlabs.com" style={{ padding: "10px 24px", fontSize: 9 }}>Contact Us</GradientButton>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section id="hero" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "120px 64px 80px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${T.midTeal} 1px, transparent 1px), linear-gradient(90deg, ${T.midTeal} 1px, transparent 1px)`, backgroundSize: "64px 64px", animation: "gridPulse 10s ease infinite" }} />
+        {[{ x: "72%", y: "12%", s: 100, d: "7s", o: 0.05 }, { x: "82%", y: "52%", s: 70, d: "9s", o: 0.035 }, { x: "60%", y: "78%", s: 50, d: "8s", o: 0.04 }].map((h, i) => <div key={i} style={{ position: "absolute", left: h.x, top: h.y, animation: `float ${h.d} ease-in-out infinite`, opacity: h.o }}><ArtemyxIcon size={h.s} id={`floatIcon${i}`} /></div>)}
+
+        <Reveal><div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: 4, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 28 }}>AI Platform Services</div></Reveal>
+        <Reveal delay={100}><h1 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5.5vw, 64px)", lineHeight: 1.1, letterSpacing: -0.5, maxWidth: 780, marginBottom: 28 }}>We build the <span style={{ background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>platforms</span> that scale your vision</h1></Reveal>
+        <Reveal delay={200}><p style={{ fontSize: 17, lineHeight: 1.7, color: T.muted, maxWidth: 520, marginBottom: 44 }}>AI-native software development, managed services, and venture partnerships. From discovery to production — and beyond.</p></Reveal>
+        <Reveal delay={300}><div style={{ display: "flex", gap: 16 }}><GradientButton onClick={() => scrollTo("portfolio")}>View Our Work</GradientButton><GradientButton href="mailto:hello@artemyxlabs.com" variant="outline">Start a Conversation</GradientButton></div></Reveal>
+        <div style={{ position: "absolute", bottom: 40, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, letterSpacing: 3, textTransform: "uppercase", color: T.mutedLight }}>Scroll</span>
+          <div style={{ width: 1, height: 36, background: `linear-gradient(to bottom, ${T.midTeal}, transparent)`, animation: "pulse 2s ease infinite" }} />
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section id="services" style={{ padding: "100px 64px", borderTop: `1px solid ${T.rule}` }}>
+        <Reveal>
+          <SectionLabel>How We Work</SectionLabel>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: -0.3, marginBottom: 10 }}>Three Tracks, One Studio</h2>
+          <p style={{ fontSize: 16, color: T.muted, maxWidth: 520, marginBottom: 56, lineHeight: 1.65 }}>Every engagement is structured around clear pathways from project-based development to lasting partnerships.</p>
+        </Reveal>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0, border: `1px solid ${T.rule}` }}>
+          {[
+            { num: "I", name: "Build", sub: "Project-Based Development",
+              desc: "From discovery through production deployment. We architect and build production-grade SaaS platforms, internal tools, and customer-facing products. Three-phase delivery with clear milestones, stakeholder demos, and natural decision points at every stage ensures alignment from kickoff to launch.",
+              items: [{ label: "Phase 01", title: "Discover & Prototype", detail: "Scope definition, technical architecture, UX wireframes, proof of concept" }, { label: "Phase 02", title: "MVP Build", detail: "Core feature development, integrations, internal testing, staging environment" }, { label: "Phase 03", title: "Production Deploy", detail: "Performance optimization, launch, staff training, documentation, handoff" }],
+              pricingNote: "Scoped and priced per project based on product complexity, integration depth, and timeline. All engagements begin with a paid Discovery Session." },
+            { num: "II", name: "Run", sub: "Managed Services & Support",
+              desc: "Your product doesn't stop evolving at launch. We provide ongoing platform management, front-line support, and continuous improvement through monthly retainers. From bug fixes and security patches to feature development and scaling — we keep the products we build running at peak performance.",
+              items: [{ label: "Tier 01", title: "Maintenance", detail: "Bug fixes, security patches, uptime monitoring, dependency updates" }, { label: "Tier 02", title: "Growth", detail: "Feature development, performance optimization, scaling infrastructure" }, { label: "Tier 03", title: "Dedicated", detail: "Full operational ownership, SLA-backed support, priority response" }],
+              pricingNote: "Monthly retainers scaled to scope of services, platform complexity, and response-time requirements." },
+            { num: "III", name: "Venture", sub: "Equity Partnerships",
+              desc: "For the right ideas, we invest development capacity and operational expertise in exchange for equity. We don't just build for you — we build with you. Our venture track lets us take a real stake in the products we believe in, aligning our success with yours from day one.",
+              items: [{ label: "Model A", title: "Build-for-Equity", detail: "Full development services in exchange for ownership stake" }, { label: "Model B", title: "Run-for-Equity", detail: "Ongoing managed services contributed against equity position" }, { label: "Model C", title: "Incubation", detail: "Capital, technical expertise, and operational support from concept to market" }],
+              pricingNote: "Equity stakes commensurate with the scope of work, stage of product, and level of contribution. All terms negotiated individually." },
+          ].map((track, i) => (
+            <Reveal key={i} delay={i * 100}>
+              <div style={{ padding: "44px 36px 40px", borderRight: i < 2 ? `1px solid ${T.rule}` : "none", position: "relative", minHeight: 520, display: "flex", flexDirection: "column" }}>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: T.gradient }} />
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 22, fontWeight: 300, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", opacity: 0.35, marginBottom: 18 }}>{track.num}</div>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 22, letterSpacing: 0.5, marginBottom: 4 }}>{track.name}</div>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: T.muted, marginBottom: 18 }}>{track.sub}</div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: T.muted, marginBottom: 28 }}>{track.desc}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 24 }}>
+                  {track.items.map((item, j) => <div key={j} style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 12 }}>
+                    <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, color: T.midTeal, paddingTop: 2, whiteSpace: "nowrap", fontWeight: 500 }}>{item.label}</span>
+                    <div><div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 11, marginBottom: 2 }}>{item.title}</div><div style={{ fontSize: 12, color: T.muted, lineHeight: 1.5 }}>{item.detail}</div></div>
+                  </div>)}
+                </div>
+                <div style={{ padding: "14px 16px", background: T.gradientCard, borderLeft: `2px solid ${T.midTeal}`, marginBottom: 20, flex: 1 }}>
+                  <p style={{ fontSize: 11, lineHeight: 1.55, color: T.muted, fontStyle: "italic" }}>{track.pricingNote}</p>
+                </div>
+                <GradientButton href="mailto:hello@artemyxlabs.com" variant="outline" style={{ fontSize: 9, padding: "10px 20px", textAlign: "center", width: "100%" }}>Contact Us →</GradientButton>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* PORTFOLIO */}
+      <section id="portfolio" style={{ padding: "100px 64px", borderTop: `1px solid ${T.rule}`, background: T.bgSoft }}>
+        <Reveal>
+          <SectionLabel>Portfolio</SectionLabel>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: -0.3, marginBottom: 10 }}>Selected Work</h2>
+          <p style={{ fontSize: 16, color: T.muted, maxWidth: 520, marginBottom: 56, lineHeight: 1.65 }}>Production platforms built with AI-assisted development, shipping at the pace of a team three times our size.</p>
+        </Reveal>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          {caseStudies.map((study, i) => (
+            <Reveal key={study.id} delay={i * 120}>
+              <div className="case-card" onClick={() => setActiveStudy(study)} style={{ background: T.bg, border: `1px solid ${T.rule}`, cursor: "pointer", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ height: 130, background: T.gradient, padding: "24px 28px", display: "flex", flexDirection: "column", justifyContent: "flex-end", position: "relative" }}>
+                  <div style={{ position: "absolute", top: 16, right: 18 }}><ArtemyxIcon size={28} id={`cardIcon${i}`} /></div>
+                  <div style={{ position: "absolute", top: 18, left: 28, fontFamily: "'Orbitron', sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: "rgba(255,255,255,0.55)" }}>{study.trackLabel}</div>
+                  <h3 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 24, color: "#fff", letterSpacing: 0.5 }}>{study.title}</h3>
+                </div>
+                <div style={{ padding: "22px 28px", flex: 1, display: "flex", flexDirection: "column" }}>
+                  <p style={{ fontSize: 13, color: T.muted, fontStyle: "italic", marginBottom: 14 }}>{study.subtitle}</p>
+                  <p style={{ fontSize: 13, lineHeight: 1.65, color: T.inkSoft, marginBottom: 20, flex: 1 }}>{study.hero}</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: T.rule, marginBottom: 18 }}>
+                    {study.stats.slice(0, 2).map((s, j) => <div key={j} style={{ background: T.bg, padding: "12px 14px" }}>
+                      <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 15, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{s.value}</div>
+                      <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 7, fontWeight: 500, color: T.muted, textTransform: "uppercase", letterSpacing: 1 }}>{s.label}</div>
+                    </div>)}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                      {study.tags.slice(0, 3).map(t => <span key={t} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 7, letterSpacing: 1, textTransform: "uppercase", padding: "3px 8px", background: "rgba(0,184,204,0.06)", color: T.midTeal }}>{t}</span>)}
+                    </div>
+                    <span className="card-arrow" style={{ fontSize: 18, color: T.midTeal, transition: "transform 0.2s", fontWeight: 300 }}>→</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={400}><p style={{ textAlign: "center", marginTop: 36, fontFamily: "'Orbitron', sans-serif", fontSize: 9, letterSpacing: 2, color: T.mutedLight, textTransform: "uppercase" }}>Click any project for the full interactive case study</p></Reveal>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" style={{ padding: "100px 64px", borderTop: `1px solid ${T.rule}` }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 72, alignItems: "start" }}>
+          <Reveal>
+            <SectionLabel>About</SectionLabel>
+            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: -0.3, marginBottom: 24 }}>AI-Native<br/>Development Studio</h2>
+            <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft, marginBottom: 16 }}>Artemyx Labs is an AI platform services company that operates as both a consulting firm and venture studio. We build production-grade SaaS platforms, provide ongoing managed services, and take equity partnerships in the companies we believe in.</p>
+            <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft, marginBottom: 16 }}>Our AI-assisted development methodology — leveraging Claude Code, Lovable.dev, and purpose-built toolchains — enables us to deliver at the pace of a team three times our size without compromising on architecture or quality.</p>
+            <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft }}>Based in Colorado, we specialize in multi-tenant SaaS, conversational AI, real-time systems, and platforms built to scale from day one.</p>
+          </Reveal>
+          <Reveal delay={120}>
+            <SectionLabel>Core Capabilities</SectionLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginBottom: 28 }}>
+              {[
+                { label: "Multi-Tenant SaaS", detail: "Row-level security, data isolation, tenant onboarding" },
+                { label: "Conversational AI", detail: "Dual agents, MCP integration, NLP pipelines" },
+                { label: "Real-Time Systems", detail: "Live capacity tracking, sync pipelines, WebSockets" },
+                { label: "Payment Platforms", detail: "Stripe Connect, fee splitting, marketplace payments" },
+                { label: "Offline-First PWAs", detail: "IndexedDB, background sync, service workers" },
+                { label: "Analytics & BI", detail: "Custom dashboards, report builders, data visualization" },
+                { label: "Data Pipelines & ETL", detail: "Automated ingestion, scraping, transformation, scheduling" },
+                { label: "Marketing Automation", detail: "SMS/email campaigns, segmentation, A/B testing" },
+                { label: "AI Agent Development", detail: "Function calling, tool use, hallucination prevention" },
+                { label: "API Design & Integration", detail: "REST, GraphQL, third-party system connectors" },
+                { label: "Identity & Access Control", detail: "RBAC, SSO, OAuth, JWT, multi-org permissions" },
+                { label: "Cloud Infrastructure", detail: "AWS, Vercel, Render, Docker, CI/CD, monitoring" },
+              ].map((cap, i) => <div key={i} className="cap-card" style={{ background: T.bg, padding: "16px 18px", transition: "all 0.2s ease", cursor: "default", border: "1px solid transparent" }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: 0.3, marginBottom: 3, color: T.ink }}>{cap.label}</div>
+                <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.4 }}>{cap.detail}</div>
+              </div>)}
+            </div>
+            <SectionLabel>Technology Stack</SectionLabel>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {["React","Next.js","TypeScript","Node.js","Python","Supabase","PostgreSQL","Redis","Stripe","Twilio","Anthropic Claude","OpenAI","MCP Protocol","AWS","Vercel","Render","Docker","Recharts","D3.js","shadcn/ui","Tailwind CSS","Vitest","Playwright","React Testing Library"].map(t => <span key={t} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, padding: "5px 12px", background: T.darkBg, color: T.teal, letterSpacing: 0.5 }}>{t}</span>)}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" style={{ padding: "100px 64px", background: T.darkBg, color: T.lightText, borderTop: `1px solid rgba(0,184,204,0.1)` }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 72, alignItems: "center" }}>
+          <Reveal>
+            <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 14 }}>Let's Talk</div>
+            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, color: T.lightText, marginBottom: 24, letterSpacing: -0.3 }}>Start With a<br/>Discovery Session</h2>
+            <p style={{ fontSize: 16, lineHeight: 1.75, color: "rgba(226,232,240,0.55)", marginBottom: 36 }}>Every engagement begins with a paid Discovery Session, credited toward Phase 01 if the project proceeds. This ensures we understand your product deeply before committing scope, timeline, or pricing.</p>
+            <GradientButton href="mailto:hello@artemyxlabs.com">Contact Us</GradientButton>
+            <div style={{ marginTop: 28 }}>
+              <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 500, fontSize: 12, color: T.teal, marginBottom: 4 }}>hello@artemyxlabs.com</div>
+              <div style={{ fontSize: 12, color: "rgba(226,232,240,0.35)" }}>Colorado</div>
+            </div>
+          </Reveal>
+          <Reveal delay={150}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: "rgba(226,232,240,0.06)" }}>
+              {[{ label: "Model", value: "Build · Run · Venture" }, { label: "Specialization", value: "AI-Native SaaS & Platform Development" }, { label: "Portfolio", value: "Nyx AI · HypeTix · Creator Connections" }, { label: "Location", value: "Colorado" }].map((item, i) => <div key={i} style={{ padding: "22px", background: "rgba(226,232,240,0.02)" }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: T.midTeal, marginBottom: 6 }}>{item.label}</div>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 12, color: T.lightText }}>{item.value}</div>
+              </div>)}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ padding: "28px 64px", borderTop: "1px solid rgba(226,232,240,0.06)", background: T.darkBg, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <ArtemyxIcon size={18} id="footerIcon" />
+          <span style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(226,232,240,0.3)" }}>Artemyx Labs, LLC</span>
+        </div>
+        <span style={{ fontSize: 10, color: "rgba(226,232,240,0.2)" }}>© 2026 · Colorado</span>
+      </footer>
+
+      {activeStudy && <CaseStudyDetail study={activeStudy} onClose={() => setActiveStudy(null)} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
