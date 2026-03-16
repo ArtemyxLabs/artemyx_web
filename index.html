@@ -27,12 +27,46 @@
   .cap-card:hover { border-color: #00B8CC !important; background: linear-gradient(135deg, rgba(0,212,170,0.04) 0%, rgba(0,119,255,0.03) 100%) !important; }
   .gradient-btn:hover { opacity: 0.9; transform: translateY(-1px); }
   .outline-btn:hover { background: rgba(0,184,204,0.06) !important; }
+
+  /* Mobile Responsive Styles */
+  @media (max-width: 768px) {
+    .desktop-nav { display: none !important; }
+    .mobile-menu-btn { display: flex !important; }
+    .services-grid { grid-template-columns: 1fr !important; }
+    .services-grid > div { border-right: none !important; border-bottom: 1px solid #E5E7EB !important; }
+    .services-grid > div:last-child { border-bottom: none !important; }
+    .portfolio-grid { grid-template-columns: 1fr !important; }
+    .about-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+    .contact-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .modal-content { padding: 24px !important; }
+    .modal-header { padding: 28px 24px 20px !important; }
+    .modal-tabs { padding: 0 24px !important; overflow-x: auto; }
+    .modal-body { padding: 24px !important; }
+    .innovations-grid { grid-template-columns: 1fr !important; }
+    .cap-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr !important; }
+    .hero-buttons { flex-direction: column !important; width: 100% !important; }
+    .hero-buttons > * { width: 100% !important; text-align: center !important; }
+  }
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
+
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= breakpoint);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= breakpoint);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+  return isMobile;
+}
 
 const T = {
   bg: "#F5F5F7", bgSoft: "#EDEDF0", ink: "#1A1A2E", inkSoft: "#2D2D44",
@@ -196,28 +230,29 @@ const caseStudies = [
 
 function CaseStudyDetail({ study, onClose }) {
   const [tab, setTab] = useState("overview");
+  const isMobile = useIsMobile();
   const tabs = [{ id: "overview", label: "Overview" }, { id: "solution", label: "Solution" }, { id: "tech", label: "Technical" }, { id: "impact", label: "Impact" }];
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(6,8,14,0.6)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, animation: "fadeIn 0.25s ease" }} onClick={onClose}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(6,8,14,0.6)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: isMobile ? 12 : 24, animation: "fadeIn 0.25s ease" }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{ background: T.bg, maxWidth: 940, width: "100%", maxHeight: "90vh", overflow: "auto", border: `1px solid ${T.rule}`, animation: "slideUp 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
-        <div style={{ padding: "40px 48px 28px", borderBottom: `1px solid ${T.rule}`, background: T.gradientSubtle, position: "relative" }}>
-          <button onClick={onClose} style={{ position: "absolute", top: 16, right: 20, background: "none", border: `1px solid ${T.rule}`, width: 36, height: 36, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: T.muted, fontFamily: "sans-serif" }}>✕</button>
+        <div className="modal-header" style={{ padding: isMobile ? "28px 20px 20px" : "40px 48px 28px", borderBottom: `1px solid ${T.rule}`, background: T.gradientSubtle, position: "relative" }}>
+          <button onClick={onClose} style={{ position: "absolute", top: 12, right: 12, background: "none", border: `1px solid ${T.rule}`, width: 36, height: 36, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: T.muted, fontFamily: "sans-serif" }}>✕</button>
           <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 10 }}>Case Study · {study.trackLabel}</div>
-          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 30, letterSpacing: 1, color: T.ink, marginBottom: 4 }}>{study.title}</h2>
-          <p style={{ fontSize: 16, color: T.muted, fontStyle: "italic" }}>{study.subtitle}</p>
-          <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 22 : 30, letterSpacing: 1, color: T.ink, marginBottom: 4 }}>{study.title}</h2>
+          <p style={{ fontSize: isMobile ? 14 : 16, color: T.muted, fontStyle: "italic" }}>{study.subtitle}</p>
+          <div style={{ display: "flex", gap: 6, marginTop: 14, flexWrap: "wrap" }}>
             {study.tags.map(t => <span key={t} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, letterSpacing: 1.5, textTransform: "uppercase", padding: "4px 10px", background: "rgba(0,184,204,0.08)", color: T.midTeal, border: "1px solid rgba(0,184,204,0.15)" }}>{t}</span>)}
           </div>
         </div>
-        <div style={{ display: "flex", borderBottom: `1px solid ${T.rule}`, padding: "0 48px" }}>
-          {tabs.map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: 1, padding: "13px 20px", border: "none", background: "none", cursor: "pointer", color: tab === t.id ? T.midTeal : T.muted, borderBottom: tab === t.id ? `2px solid ${T.midTeal}` : "2px solid transparent", transition: "all 0.2s" }}>{t.label}</button>)}
+        <div className="modal-tabs" style={{ display: "flex", borderBottom: `1px solid ${T.rule}`, padding: isMobile ? "0 16px" : "0 48px", overflowX: "auto" }}>
+          {tabs.map(t => <button key={t.id} onClick={() => setTab(t.id)} style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: isMobile ? 9 : 10, letterSpacing: 1, padding: isMobile ? "12px 14px" : "13px 20px", border: "none", background: "none", cursor: "pointer", color: tab === t.id ? T.midTeal : T.muted, borderBottom: tab === t.id ? `2px solid ${T.midTeal}` : "2px solid transparent", transition: "all 0.2s", whiteSpace: "nowrap" }}>{t.label}</button>)}
         </div>
-        <div style={{ padding: "32px 48px 48px" }}>
+        <div className="modal-body" style={{ padding: isMobile ? "24px 20px 32px" : "32px 48px 48px" }}>
           {tab === "overview" && <div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginBottom: 32 }}>
-              {study.stats.map((s, i) => <div key={i} style={{ background: T.bg, padding: "18px 14px", textAlign: "center" }}>
-                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 18, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 4 }}>{s.value}</div>
+            <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginBottom: isMobile ? 24 : 32 }}>
+              {study.stats.map((s, i) => <div key={i} style={{ background: T.bg, padding: isMobile ? "14px 10px" : "18px 14px", textAlign: "center" }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 15 : 18, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 4 }}>{s.value}</div>
                 <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 500, fontSize: 8, letterSpacing: 1.2, textTransform: "uppercase", color: T.ink, marginBottom: 2 }}>{s.label}</div>
                 <div style={{ fontSize: 10, color: T.muted }}>{s.detail}</div>
               </div>)}
@@ -229,8 +264,8 @@ function CaseStudyDetail({ study, onClose }) {
           </div>}
           {tab === "solution" && <div>
             <SectionLabel>Key Innovations</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
-              {study.innovations.map((inn, i) => <div key={i} style={{ padding: 22, border: `1px solid ${T.rule}`, background: T.gradientCard }}>
+            <div className="innovations-grid" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16, marginBottom: isMobile ? 24 : 32 }}>
+              {study.innovations.map((inn, i) => <div key={i} style={{ padding: isMobile ? 16 : 22, border: `1px solid ${T.rule}`, background: T.gradientCard }}>
                 <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: 0.5, color: T.ink, marginBottom: 8 }}>{inn.name}</div>
                 <p style={{ fontSize: 13, lineHeight: 1.6, color: T.muted }}>{inn.desc}</p>
               </div>)}
@@ -260,9 +295,9 @@ function CaseStudyDetail({ study, onClose }) {
               <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, color: T.midTeal, fontWeight: 500 }}>0{i + 1}</span>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: T.inkSoft }}>{l}</p>
             </div>)}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginTop: 32 }}>
-              {study.stats.map((s, i) => <div key={i} style={{ background: T.bg, padding: "16px 12px", textAlign: "center" }}>
-                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 16, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{s.value}</div>
+            <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginTop: isMobile ? 24 : 32 }}>
+              {study.stats.map((s, i) => <div key={i} style={{ background: T.bg, padding: isMobile ? "12px 10px" : "16px 12px", textAlign: "center" }}>
+                <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 14 : 16, background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{s.value}</div>
                 <div style={{ fontSize: 9, color: T.muted, textTransform: "uppercase", letterSpacing: 0.8, marginTop: 2 }}>{s.label}</div>
               </div>)}
             </div>
@@ -276,46 +311,62 @@ function CaseStudyDetail({ study, onClose }) {
 function App() {
   const [activeStudy, setActiveStudy] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
   useEffect(() => { const fn = () => setScrolled(window.scrollY > 50); window.addEventListener("scroll", fn); return () => window.removeEventListener("scroll", fn); }, []);
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => { if (menuOpen) document.body.style.overflow = "hidden"; else document.body.style.overflow = ""; return () => { document.body.style.overflow = ""; }; }, [menuOpen]);
+  const scrollTo = (id) => { setMenuOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); };
 
   return (
     <div>
       {/* NAV */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 900, padding: scrolled ? "10px 48px" : "18px 48px", background: scrolled ? "rgba(245,245,247,0.92)" : "transparent", backdropFilter: scrolled ? "blur(16px)" : "none", borderBottom: scrolled ? `1px solid ${T.rule}` : "1px solid transparent", transition: "all 0.3s ease", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }} onClick={() => scrollTo("hero")}>
-          <ArtemyxIcon size={scrolled ? 34 : 42} id="navIcon" />
-          <ArtemyxWordmark size="sm" />
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 900, padding: scrolled ? (isMobile ? "10px 20px" : "10px 48px") : (isMobile ? "14px 20px" : "18px 48px"), background: scrolled || menuOpen ? "rgba(245,245,247,0.97)" : "transparent", backdropFilter: scrolled || menuOpen ? "blur(16px)" : "none", borderBottom: scrolled ? `1px solid ${T.rule}` : "1px solid transparent", transition: "all 0.3s ease", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 14, cursor: "pointer" }} onClick={() => scrollTo("hero")}>
+          <ArtemyxIcon size={scrolled ? (isMobile ? 28 : 34) : (isMobile ? 32 : 42)} id="navIcon" />
+          {!isMobile && <ArtemyxWordmark size="sm" />}
         </div>
-        <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
+        <div className="desktop-nav" style={{ display: "flex", gap: 32, alignItems: "center" }}>
           {["Services", "Portfolio", "About"].map(item => <span key={item} className="nav-link" onClick={() => scrollTo(item.toLowerCase())} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: T.muted, cursor: "pointer", transition: "color 0.2s" }}>{item}</span>)}
           <GradientButton href="mailto:hello@artemyxlabs.com" style={{ padding: "10px 24px", fontSize: 9 }}>Contact Us</GradientButton>
         </div>
+        <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)} style={{ display: "none", alignItems: "center", justifyContent: "center", width: 40, height: 40, background: "none", border: "none", cursor: "pointer", flexDirection: "column", gap: 5 }}>
+          <span style={{ width: 22, height: 2, background: T.ink, transition: "all 0.3s", transform: menuOpen ? "rotate(45deg) translateY(3.5px)" : "none" }} />
+          <span style={{ width: 22, height: 2, background: T.ink, transition: "all 0.3s", opacity: menuOpen ? 0 : 1 }} />
+          <span style={{ width: 22, height: 2, background: T.ink, transition: "all 0.3s", transform: menuOpen ? "rotate(-45deg) translateY(-3.5px)" : "none" }} />
+        </button>
       </nav>
 
-      {/* HERO */}
-      <section id="hero" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "120px 64px 80px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${T.midTeal} 1px, transparent 1px), linear-gradient(90deg, ${T.midTeal} 1px, transparent 1px)`, backgroundSize: "64px 64px", animation: "gridPulse 10s ease infinite" }} />
-        {[{ x: "72%", y: "12%", s: 100, d: "7s", o: 0.05 }, { x: "82%", y: "52%", s: 70, d: "9s", o: 0.035 }, { x: "60%", y: "78%", s: 50, d: "8s", o: 0.04 }].map((h, i) => <div key={i} style={{ position: "absolute", left: h.x, top: h.y, animation: `float ${h.d} ease-in-out infinite`, opacity: h.o }}><ArtemyxIcon size={h.s} id={`floatIcon${i}`} /></div>)}
+      {/* Mobile Menu Overlay */}
+      {menuOpen && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 850, background: "rgba(245,245,247,0.98)", backdropFilter: "blur(20px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32, animation: "fadeIn 0.25s ease" }}>
+          {["Services", "Portfolio", "About"].map(item => <span key={item} onClick={() => scrollTo(item.toLowerCase())} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 14, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: T.ink, cursor: "pointer" }}>{item}</span>)}
+          <GradientButton href="mailto:hello@artemyxlabs.com" onClick={() => setMenuOpen(false)} style={{ marginTop: 16 }}>Contact Us</GradientButton>
+        </div>
+      )}
 
-        <Reveal><div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: 4, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 28 }}>AI Platform Services</div></Reveal>
-        <Reveal delay={100}><h1 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5.5vw, 64px)", lineHeight: 1.1, letterSpacing: -0.5, maxWidth: 780, marginBottom: 28 }}>We build the <span style={{ background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>platforms</span> that scale your vision</h1></Reveal>
-        <Reveal delay={200}><p style={{ fontSize: 17, lineHeight: 1.7, color: T.muted, maxWidth: 520, marginBottom: 44 }}>AI-native software development, managed services, and venture partnerships. From discovery to production — and beyond.</p></Reveal>
-        <Reveal delay={300}><div style={{ display: "flex", gap: 16 }}><GradientButton onClick={() => scrollTo("portfolio")}>View Our Work</GradientButton><GradientButton href="mailto:hello@artemyxlabs.com" variant="outline">Start a Conversation</GradientButton></div></Reveal>
-        <div style={{ position: "absolute", bottom: 40, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+      {/* HERO */}
+      <section id="hero" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: isMobile ? "100px 24px 60px" : "120px 64px 80px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${T.midTeal} 1px, transparent 1px), linear-gradient(90deg, ${T.midTeal} 1px, transparent 1px)`, backgroundSize: isMobile ? "48px 48px" : "64px 64px", animation: "gridPulse 10s ease infinite" }} />
+        {!isMobile && [{ x: "72%", y: "12%", s: 100, d: "7s", o: 0.05 }, { x: "82%", y: "52%", s: 70, d: "9s", o: 0.035 }, { x: "60%", y: "78%", s: 50, d: "8s", o: 0.04 }].map((h, i) => <div key={i} style={{ position: "absolute", left: h.x, top: h.y, animation: `float ${h.d} ease-in-out infinite`, opacity: h.o }}><ArtemyxIcon size={h.s} id={`floatIcon${i}`} /></div>)}
+
+        <Reveal><div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: isMobile ? 9 : 10, fontWeight: 600, letterSpacing: 4, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: isMobile ? 20 : 28 }}>AI Platform Services</div></Reveal>
+        <Reveal delay={100}><h1 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 800, fontSize: "clamp(28px, 8vw, 64px)", lineHeight: 1.1, letterSpacing: -0.5, maxWidth: 780, marginBottom: isMobile ? 20 : 28 }}>We build the <span style={{ background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>platforms</span> that scale your vision</h1></Reveal>
+        <Reveal delay={200}><p style={{ fontSize: isMobile ? 15 : 17, lineHeight: 1.7, color: T.muted, maxWidth: 520, marginBottom: isMobile ? 32 : 44 }}>AI-native software development, managed services, and venture partnerships. From discovery to production — and beyond.</p></Reveal>
+        <Reveal delay={300}><div className="hero-buttons" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}><GradientButton onClick={() => scrollTo("portfolio")}>View Our Work</GradientButton><GradientButton href="mailto:hello@artemyxlabs.com" variant="outline">Start a Conversation</GradientButton></div></Reveal>
+        <div style={{ position: "absolute", bottom: isMobile ? 24 : 40, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, letterSpacing: 3, textTransform: "uppercase", color: T.mutedLight }}>Scroll</span>
           <div style={{ width: 1, height: 36, background: `linear-gradient(to bottom, ${T.midTeal}, transparent)`, animation: "pulse 2s ease infinite" }} />
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services" style={{ padding: "100px 64px", borderTop: `1px solid ${T.rule}` }}>
+      <section id="services" style={{ padding: isMobile ? "60px 24px" : "100px 64px", borderTop: `1px solid ${T.rule}` }}>
         <Reveal>
           <SectionLabel>How We Work</SectionLabel>
-          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: -0.3, marginBottom: 10 }}>Three Tracks, One Studio</h2>
-          <p style={{ fontSize: 16, color: T.muted, maxWidth: 520, marginBottom: 56, lineHeight: 1.65 }}>Every engagement is structured around clear pathways from project-based development to lasting partnerships.</p>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 24 : 32, letterSpacing: -0.3, marginBottom: 10 }}>Three Tracks, One Studio</h2>
+          <p style={{ fontSize: isMobile ? 14 : 16, color: T.muted, maxWidth: 520, marginBottom: isMobile ? 36 : 56, lineHeight: 1.65 }}>Every engagement is structured around clear pathways from project-based development to lasting partnerships.</p>
         </Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0, border: `1px solid ${T.rule}` }}>
+        <div className="services-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0, border: `1px solid ${T.rule}` }}>
           {[
             { num: "I", name: "Build", sub: "Project-Based Development",
               desc: "From discovery through production deployment. We architect and build production-grade SaaS platforms, internal tools, and customer-facing products. Three-phase delivery with clear milestones, stakeholder demos, and natural decision points at every stage ensures alignment from kickoff to launch.",
@@ -354,13 +405,13 @@ function App() {
       </section>
 
       {/* PORTFOLIO */}
-      <section id="portfolio" style={{ padding: "100px 64px", borderTop: `1px solid ${T.rule}`, background: T.bgSoft }}>
+      <section id="portfolio" style={{ padding: isMobile ? "60px 24px" : "100px 64px", borderTop: `1px solid ${T.rule}`, background: T.bgSoft }}>
         <Reveal>
           <SectionLabel>Portfolio</SectionLabel>
-          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: -0.3, marginBottom: 10 }}>Selected Work</h2>
-          <p style={{ fontSize: 16, color: T.muted, maxWidth: 520, marginBottom: 56, lineHeight: 1.65 }}>Production platforms built with AI-assisted development, shipping at the pace of a team three times our size.</p>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 24 : 32, letterSpacing: -0.3, marginBottom: 10 }}>Selected Work</h2>
+          <p style={{ fontSize: isMobile ? 14 : 16, color: T.muted, maxWidth: 520, marginBottom: isMobile ? 36 : 56, lineHeight: 1.65 }}>Production platforms built with AI-assisted development, shipping at the pace of a team three times our size.</p>
         </Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+        <div className="portfolio-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: isMobile ? 20 : 24 }}>
           {caseStudies.map((study, i) => (
             <Reveal key={study.id} delay={i * 120}>
               <div className="case-card" onClick={() => setActiveStudy(study)} style={{ background: T.bg, border: `1px solid ${T.rule}`, cursor: "pointer", overflow: "hidden", display: "flex", flexDirection: "column" }}>
@@ -393,18 +444,18 @@ function App() {
       </section>
 
       {/* ABOUT */}
-      <section id="about" style={{ padding: "100px 64px", borderTop: `1px solid ${T.rule}` }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 72, alignItems: "start" }}>
+      <section id="about" style={{ padding: isMobile ? "60px 24px" : "100px 64px", borderTop: `1px solid ${T.rule}` }}>
+        <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: isMobile ? 48 : 72, alignItems: "start" }}>
           <Reveal>
             <SectionLabel>About</SectionLabel>
-            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: -0.3, marginBottom: 24 }}>AI-Native<br/>Development Studio</h2>
+            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 24 : 32, letterSpacing: -0.3, marginBottom: 24 }}>AI-Native<br/>Development Studio</h2>
             <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft, marginBottom: 16 }}>Artemyx Labs is an AI platform services company that operates as both a consulting firm and venture studio. We build production-grade SaaS platforms, provide ongoing managed services, and take equity partnerships in the companies we believe in.</p>
             <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft, marginBottom: 16 }}>Our AI-assisted development methodology — leveraging Claude Code, Lovable.dev, and purpose-built toolchains — enables us to deliver at the pace of a team three times our size without compromising on architecture or quality.</p>
             <p style={{ fontSize: 15, lineHeight: 1.75, color: T.inkSoft }}>Based in Colorado, we specialize in multi-tenant SaaS, conversational AI, real-time systems, and platforms built to scale from day one.</p>
           </Reveal>
           <Reveal delay={120}>
             <SectionLabel>Core Capabilities</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginBottom: 28 }}>
+            <div className="cap-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: T.rule, border: `1px solid ${T.rule}`, marginBottom: 28 }}>
               {[
                 { label: "Multi-Tenant SaaS", detail: "Row-level security, data isolation, tenant onboarding" },
                 { label: "Conversational AI", detail: "Dual agents, MCP integration, NLP pipelines" },
@@ -432,11 +483,11 @@ function App() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" style={{ padding: "100px 64px", background: T.darkBg, color: T.lightText, borderTop: `1px solid rgba(0,184,204,0.1)` }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 72, alignItems: "center" }}>
+      <section id="contact" style={{ padding: isMobile ? "60px 24px" : "100px 64px", background: T.darkBg, color: T.lightText, borderTop: `1px solid rgba(0,184,204,0.1)` }}>
+        <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: isMobile ? 48 : 72, alignItems: "center" }}>
           <Reveal>
             <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", background: T.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 14 }}>Let's Talk</div>
-            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: 32, color: T.lightText, marginBottom: 24, letterSpacing: -0.3 }}>Start With a<br/>Discovery Session</h2>
+            <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 700, fontSize: isMobile ? 24 : 32, color: T.lightText, marginBottom: 24, letterSpacing: -0.3 }}>Start With a<br/>Discovery Session</h2>
             <p style={{ fontSize: 16, lineHeight: 1.75, color: "rgba(226,232,240,0.55)", marginBottom: 36 }}>Every engagement begins with a paid Discovery Session, credited toward Phase 01 if the project proceeds. This ensures we understand your product deeply before committing scope, timeline, or pricing.</p>
             <GradientButton href="mailto:hello@artemyxlabs.com">Contact Us</GradientButton>
             <div style={{ marginTop: 28 }}>
@@ -456,7 +507,7 @@ function App() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: "28px 64px", borderTop: "1px solid rgba(226,232,240,0.06)", background: T.darkBg, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <footer style={{ padding: isMobile ? "24px" : "28px 64px", borderTop: "1px solid rgba(226,232,240,0.06)", background: T.darkBg, display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 12 : 0, justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <ArtemyxIcon size={18} id="footerIcon" />
           <span style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(226,232,240,0.3)" }}>Artemyx Labs, LLC</span>
