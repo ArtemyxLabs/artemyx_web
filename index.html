@@ -226,6 +226,39 @@ const caseStudies = [
       "Ship quickly and iterate — the V1 report builder was replaced entirely by V2 based on real usage patterns.",
     ],
   },
+  {
+    id: "arcahq", title: "ArcaHQ", subtitle: "AI-Native Operations Platform for Software Studios",
+    hero: "The PM tool that doesn't exist yet — three user lenses on the same data: a sprint board for developers, a milestone portal for clients, and a live P&L engine for PMs, unified by AI that eliminates administrative work.",
+    trackLabel: "Internal Build", tags: ["AI/ML", "Project Management", "SaaS", "GitHub Sync", "Stripe", "Multi-Role"],
+    stats: [
+      { label: "Tools Replaced", value: "5", detail: "Linear + Accelo + HoneyBook + Harvest + QB" },
+      { label: "AI Capabilities", value: "8", detail: "Native, not bolted on" },
+      { label: "DB Tables w/ RLS", value: "20+", detail: "Three-role data isolation" },
+      { label: "User Lenses", value: "3", detail: "Dev · PM · Client" },
+    ],
+    challenge: "Small software studios are forced to stitch together 3–5 tools at $150–250/month because no single platform serves developers (who need sprint boards and GitHub sync), PMs (who need pipeline CRM and real-time P&L), and clients (who need milestone approvals and invoice payment) simultaneously. Every tool excels in one dimension while completely ignoring the others.",
+    solution: "We built ArcaHQ as Artemyx Labs' internal ops platform — an AI-native PM tool with three distinct user lenses on the same underlying project data. AI serves as the translation layer: auto-generating weekly client status reports, scoring change requests against the original SOW, inferring time entries from GitHub commits, and drafting SOWs from discovery notes.",
+    innovations: [
+      { name: "Three-Lens Architecture", desc: "The same project data rendered as a sprint board for developers, a milestone tracker for clients, and a profitability dashboard for the PM — with AI translating between all three automatically. No competitor does this." },
+      { name: "AI Scope Guard", desc: "Every client request is automatically assessed against the project SOW and existing task list, returning in-scope / out-of-scope / ambiguous verdict with rationale and effort estimate before the PM sees it." },
+      { name: "GitHub ↔ Task Sync", desc: "Branch create → task In Progress. PR open → In Review. PR merge → Done plus inferred time suggestion. Developers never manually update a PM tool. Named convention: feat/ahq-{taskid}-description." },
+      { name: "Auto Client Status Reports", desc: "Monday 8am cron: Claude composes a plain-language weekly update from task completions, hours logged, and milestone status — PM reviews and sends in 2 minutes instead of writing in 30." },
+    ],
+    phases: [
+      { num: "00", title: "Modularization", detail: "Broke 3,600-line App.jsx into lib, components, views, hooks — clean foundation for all subsequent phases" },
+      { num: "01", title: "Developer Experience", detail: "Sprint board, code notes with Monaco editor, ⌘K command palette, GitHub webhook sync, AI-inferred time suggestions" },
+      { num: "02", title: "Client Portal", detail: "AI weekly status summaries, milestone approval workflow, Stripe invoice payment, scope guard on change requests" },
+      { num: "03", title: "Financial Intelligence", detail: "Real P&L engine, capacity heatmap, full retainer lifecycle with auto-invoicing, budget burn alerts" },
+      { num: "04", title: "AI Hub + Document Studio", detail: "Meeting log, SOW/MSA generator from discovery notes, insights history, AI actions audit trail" },
+    ],
+    techStack: ["React 18", "Supabase", "PostgreSQL", "Netlify Functions", "Anthropic Claude", "OpenAI Whisper", "Stripe", "GitHub Webhooks", "Resend", "Monaco Editor"],
+    businessValue: "ArcaHQ replaces a $150–250/month five-tool stack with a single platform purpose-built for AI-native software studios. Artemyx Labs runs its entire pipeline through it — from discovery calls to signed proposals to active projects to retainer billing. The path to productization: refine under internal load, establish a category-defining name with an available domain, and bring to market as the PM tool for software studios the market has been waiting for.",
+    lessons: [
+      "The gap isn't a missing feature — it's a missing translation layer. The same project data means something completely different to a developer, a PM, and a client. AI solves this without building three separate apps.",
+      "Developers will only log time if the friction is near zero. GitHub commit inference and one-click confirmation is the threshold — manual entry from memory is dead on arrival.",
+      "Internal use as a forcing function beats beta programs. Running your own business on the tool you're building surfaces rough edges that no user research ever would.",
+    ],
+  },
 ];
 
 function CaseStudyDetail({ study, onClose }) {
@@ -497,7 +530,7 @@ function App() {
           </Reveal>
           <Reveal delay={150}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: "rgba(226,232,240,0.06)" }}>
-              {[{ label: "Model", value: "Build · Run · Venture" }, { label: "Specialization", value: "AI-Native SaaS & Platform Development" }, { label: "Portfolio", value: "Nyx AI · HypeTix · Creator Connections" }, { label: "Location", value: "Colorado" }].map((item, i) => <div key={i} style={{ padding: "22px", background: "rgba(226,232,240,0.02)" }}>
+              {[{ label: "Model", value: "Build · Run · Venture" }, { label: "Specialization", value: "AI-Native SaaS & Platform Development" }, { label: "Portfolio", value: "HypeTix · Nyx AI · Creator Connections · ArcaHQ" }, { label: "Location", value: "Colorado" }].map((item, i) => <div key={i} style={{ padding: "22px", background: "rgba(226,232,240,0.02)" }}>
                 <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: T.midTeal, marginBottom: 6 }}>{item.label}</div>
                 <div style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 12, color: T.lightText }}>{item.value}</div>
               </div>)}
