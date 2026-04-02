@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-The public marketing site for Artemyx Labs, LLC. Deployed via **Netlify**, source managed in **GitHub**. The site is a **single-file React + Babel in-browser app** — no build step, no bundler, no `npm install`. Just one `index.html`.
+The public marketing site for Artemyx Labs, LLC. Deployed via **Cloudflare Pages**, source managed in **GitHub**. The site is a **single-file React + Babel in-browser app** — no build step, no bundler, no `npm install`. Just one `index.html`.
 
 **Live URL:** https://artemyxlabs.com  
 **Stack:** Vanilla HTML + inline React 18 (via CDN UMD builds) + Babel Standalone (JSX transpiled in-browser)  
-**Deploy:** Push to `main` branch → Netlify auto-deploys. No build command needed — Netlify serves the static file directly.
+**Deploy:** GitHub Actions → `wrangler pages deploy` on push/tag. See README for environment URLs and the full Release Train.
 
 ---
 
@@ -154,13 +154,17 @@ White background, `borderRadius: 16`, `border: \`1px solid ${T.rule}\``, `boxSha
 ## Deploy Process
 
 ```bash
+# Dev (immediate — push to main)
 git add index.html
-git commit -m "your message"
+git commit -m "update: what changed"
 git push origin main
-# Netlify picks it up automatically — live in ~30 seconds
+
+# Staging + Prod (Release Train)
+git checkout -b release/x.y.z && git push origin release/x.y.z  # → staging
+git tag vx.y.z && git push origin vx.y.z                        # → prod
 ```
 
-No build step. No `npm run build`. Netlify publish directory should be set to `/` (root) with no build command.
+No build step. No `npm run build`. Cloudflare Pages serves `index.html` directly from the root.
 
 ---
 
