@@ -184,3 +184,13 @@ Find the `navLinks` array near the top of the Nav component.
 
 **Add a new page/route:**
 The site is currently single-page with no router. If routing is needed, add `react-router-dom` via CDN or implement a simple `useState`-based view switcher.
+
+---
+
+## Resend CLI
+
+For email functionality, install the Resend CLI:
+
+```powershell
+irm https://resend.com/install.ps1 | iex
+```
