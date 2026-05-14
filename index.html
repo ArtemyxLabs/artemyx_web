@@ -10,6 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@13.0.0/marked.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -50,6 +51,26 @@
     .stats-grid { grid-template-columns: 1fr !important; }
     .hero-buttons { flex-direction: column !important; width: 100% !important; }
     .hero-buttons > * { width: 100% !important; text-align: center !important; }
+  }
+
+  /* Legal pages (/privacy, /terms) — typography for rendered markdown. */
+  .legal-content { font-size: 16px; line-height: 1.65; color: #2D2D44; }
+  .legal-content h1 { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.25; letter-spacing: 0.5px; margin: 0 0 8px; color: #1A1A2E; }
+  .legal-content h2 { font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 20px; line-height: 1.3; letter-spacing: 0.5px; margin: 40px 0 12px; color: #1A1A2E; }
+  .legal-content h3 { font-weight: 600; font-size: 16px; line-height: 1.3; margin: 24px 0 8px; color: #1A1A2E; }
+  .legal-content p { margin: 0 0 14px; }
+  .legal-content strong { color: #1A1A2E; font-weight: 600; }
+  .legal-content ul, .legal-content ol { margin: 0 0 14px 22px; padding: 0; }
+  .legal-content li { margin: 6px 0; }
+  .legal-content a { color: #00B8CC; text-decoration: underline; text-underline-offset: 2px; }
+  .legal-content a:hover { color: #0077FF; }
+  .legal-content hr { border: 0; border-top: 1px solid #E5E7EB; margin: 32px 0; }
+  .legal-content em { color: #6B7280; font-style: italic; }
+  .legal-content blockquote { border-left: 3px solid #00B8CC; padding: 4px 16px; margin: 16px 0; background: rgba(0,184,204,0.04); color: #2D2D44; }
+  @media (max-width: 768px) {
+    .legal-content { font-size: 15px; }
+    .legal-content h1 { font-size: 26px; }
+    .legal-content h2 { font-size: 18px; }
   }
 </style>
 </head>
@@ -341,7 +362,535 @@ function CaseStudyDetail({ study, onClose }) {
   );
 }
 
+// ─── Legal pages (/privacy, /terms) ──────────────────────────────────────────
+// Cleaned production text Apple App Store Connect validates during Beta App
+// Review. Veris itself lives in the fitgrade repo and has its own in-app
+// /veris/privacy + /veris/terms surface; the artemyx_web copy is what gets
+// submitted to Apple because veris.artemyxlabs.com (this build's intended
+// custom domain) is in the same Cloudflare account as the artemyxlabs.com
+// zone — keeps the DNS + Pages attach inside one account boundary.
+
+const LEGAL_PRIVACY_MD = `# Veris Privacy Policy
+
+**Effective date:** May 14, 2026
+**Last updated:** May 14, 2026
+
+## 1. Introduction
+
+Veris is a longitudinal health intelligence platform owned and operated by Artemyx Labs. This Privacy Policy explains what data Veris collects about you, how Veris uses that data, who Veris shares it with, and the choices you have about your data.
+
+Veris is **not a covered entity under HIPAA** and **not a medical or healthcare service**. Veris is a wellness and personal-data platform. Veris does not provide medical advice, diagnosis, or treatment. The information Veris's AI agent and dashboards provide is for informational purposes only and is not a substitute for professional medical advice. Always consult a qualified healthcare provider for medical decisions.
+
+If you do not agree with this Privacy Policy, do not use Veris.
+
+## 2. What we collect
+
+### 2.1 Information you give us directly
+
+- **Account information.** Email address, password (stored as a salted hash, never in plaintext), name, age, biological sex, and any profile data you choose to enter.
+- **Health and fitness data you log or enter manually.** This includes (but is not limited to) workout records, strength performance (1RMs, PRs), aerobic test results, race results, body composition measurements, subjective wellness ratings, training notes, goals, and any other observations you type into Veris or describe to its AI agent.
+- **Files you upload.** Lab reports (PDFs, images), workout photos, screenshots, progress photos, and other artifacts you choose to upload. The contents of these files are extracted and stored as structured observations in your profile, alongside the original file.
+- **Conversations with the AI agent.** All messages you send to the AI agent, all messages it sends back to you, and any structured data it proposes to write on your behalf (which you confirm, edit, or discard).
+- **Payment information.** If and when Veris charges for services, payment information is processed by a third-party payment processor (Stripe). Veris does not store your full credit card number or banking information.
+
+### 2.2 Information we collect automatically
+
+- **Usage data.** Pages you visit within Veris, features you use, time of access, device type, browser type. We use this to improve the product.
+- **Technical data.** IP address (collected for security purposes; not used to track you), browser fingerprint (limited; no advertising trackers), session identifiers.
+- **Error logs.** When the app encounters an error, we log details (which page, what action, what error type) to debug. These logs may include your account identifier so we can correlate the error with your session.
+
+### 2.3 Information from third parties (with your consent)
+
+When you connect a third-party data source through Veris's connections feature, we receive data from that source on your behalf. This may include:
+
+- **Wearable device data** (e.g., from Whoop, Garmin, Apple Health) routed through Terra, our data aggregator: heart rate, sleep stages, HRV, training load, recovery scores, activity data.
+- **Other connected services** as we add them: rowing logbooks, race results from event organizers, etc.
+
+**You control which connections are active.** You can connect, disconnect, or revoke access at any time in Settings. Disconnecting a service stops new data from coming in but does not automatically delete data we have already received from that service. To delete that data, use the data-deletion options described in Section 7.
+
+## 3. How we use your data
+
+### 3.1 To provide Veris's core service
+
+Your data is used to:
+
+- Display your health and fitness data back to you (Profile, Home, dashboards)
+- Compute scores, percentiles, and insights based on your data
+- Power the AI agent's responses to your questions and its proactive observations
+- Allow the AI agent to write structured observations on your behalf, with your confirmation
+- Compare your data to anonymized cohort statistics (e.g., "78th percentile vs. men 35-40")
+- Track program adherence if you are enrolled in a coaching program
+
+### 3.2 To improve Veris
+
+Your data may be used in **anonymized and aggregated form** to:
+
+- Improve cohort statistics and reference ranges (so future users get more accurate percentile comparisons)
+- Train and improve the AI agent's responses (only with your explicit consent — see Section 4)
+- Identify product issues and improvements
+
+Aggregated and anonymized data cannot be re-identified to you.
+
+### 3.3 To communicate with you
+
+We may use your email address to:
+
+- Send account-related messages (password resets, security alerts)
+- Send product updates relevant to your subscription (when major features change)
+- Respond to feedback and support requests
+- Send marketing emails **only if you opt in** (you can opt out at any time)
+
+### 3.4 To comply with legal obligations
+
+We may use your data to:
+
+- Comply with applicable laws and regulations
+- Respond to lawful requests from public authorities
+- Defend legal rights and prevent fraud or abuse
+
+## 4. The four consent scopes
+
+Veris's data handling is structured around four explicit consent scopes you control. You can grant or revoke each independently in Settings → Privacy. Granting these scopes is required to use Veris meaningfully:
+
+1. **Data storage.** Permission to store your observations in our database. Without this, Veris cannot function. Revoking this consent triggers full deletion of your data.
+2. **Agent access.** Permission for the AI agent to read your observations and propose insights. Without this, the agent will not have access to your health data and will only respond to general questions.
+3. **Coach visibility.** Permission for a Cerus coach (a human professional) assigned to you, if any, to see your data. Without this, no human at Artemyx Labs or Cerus can see your data without an explicit, audited request from you.
+4. **Anonymous benchmarks.** Permission to include your data, anonymized and aggregated, in cohort statistics that improve Veris for all users. Without this, your data is excluded from cohort calculations. (Your individual data is never visible to other users in any form.)
+
+Default settings on signup: data storage and agent access are required. Coach visibility and anonymous benchmarks default to "off" until you choose.
+
+## 5. Who we share your data with
+
+### 5.1 Service providers (under contract)
+
+We use trusted third-party services that process your data on our behalf, under written agreements requiring them to handle your data securely and only as we direct. These include:
+
+- **Anthropic, Inc.** — Provides the Claude AI model that powers Veris's agent. When you converse with the agent or when the agent processes uploads (lab PDFs, screenshots, photos), the relevant content is sent to Anthropic's API. Anthropic's privacy policy applies to that processing. Anthropic does not train its models on Veris user data per its commercial terms.
+- **Supabase** (operated by Supabase Inc.) — Hosts our database, file storage, and authentication. Your account credentials and observation data are stored on Supabase's infrastructure.
+- **Amazon Web Services (AWS)** — Hosts our backend services and uploaded files. Your uploaded artifacts (lab PDFs, photos) are stored in AWS S3.
+- **Cloudflare** — Hosts the Veris frontend and provides content delivery, DNS, and security services.
+- **Terra** — Aggregates data from third-party fitness apps and wearables you choose to connect. Terra's privacy policy applies to data flowing through them.
+- **Stripe** — Processes payments if you subscribe to a paid Veris plan. Stripe's privacy policy applies to your payment information.
+- **Resend** — Delivers transactional email (password resets, account notifications). Resend's privacy policy applies to email metadata processed for delivery.
+
+We do not sell your data. We do not share your individual data with advertisers or marketers. We do not allow our service providers to use your data for purposes beyond providing services to Veris.
+
+### 5.2 Cerus coaches (with your explicit consent)
+
+If you have granted "coach visibility" consent and are paired with a Cerus coach, that coach can see your data within Veris's coach interface. Coaches are bound by professional confidentiality. You can revoke coach visibility consent at any time, immediately removing the coach's access.
+
+### 5.3 Legal requirements
+
+We may disclose your data if required by law, subpoena, or other legal process; to protect the rights, property, or safety of Veris, our users, or others; or in connection with a merger, acquisition, or sale of assets (in which case, you will be notified before your data is transferred and given the opportunity to delete your account).
+
+### 5.4 With your consent for specific purposes
+
+We may share your data with third parties for purposes you specifically consent to (e.g., participating in research, sharing data with a healthcare provider you nominate). Any such sharing requires explicit, granular consent — not buried in a checkbox.
+
+## 6. Data security
+
+We protect your data using:
+
+- Encryption in transit (TLS for all connections to and from Veris)
+- Encryption at rest (Supabase storage, AWS S3, all use encryption at rest)
+- Strong password hashing (bcrypt or equivalent; no plaintext storage)
+- Access controls (only authorized personnel at Artemyx Labs can access production systems, with audit logs)
+- Row-level security policies (your data is isolated from other users at the database level)
+- Audit logging for any agent-initiated writes to your profile
+
+No system is perfectly secure. If we discover a breach affecting your data, we will notify you in accordance with applicable law.
+
+## 7. Your rights and choices
+
+You have the following rights regarding your data:
+
+### 7.1 Access
+
+You can view all data Veris has stored about you within the app's Profile, Settings, and Data sections. You can request a complete data export in machine-readable format (JSON archive) via Settings → Data → Export.
+
+### 7.2 Correction
+
+You can correct or update most data directly in the app (your profile information, observations you've entered). For data you cannot edit directly (e.g., system-generated logs), contact us at privacy@artemyxlabs.com.
+
+### 7.3 Deletion
+
+You can delete your account from Settings → Data → Delete Account. Account deletion follows our **tiered deletion model**:
+
+- **Immediate** (within 24 hours): Your authentication credentials are disabled. Personally identifiable information (name, email, profile, contact details) is purged from our active database. Your uploaded files (lab PDFs, photos, screenshots) are hard-deleted from AWS S3.
+- **Within 30 days**: All data linked to you is deleted from our active systems and from backups (within the rolling backup window).
+- **Retained indefinitely** (in anonymized form): Your individual observation data, stripped of all identifying information, may be retained for cohort statistics and product improvement. This anonymized data cannot be linked back to you.
+
+If you do not want anonymized data retained, contact us at privacy@artemyxlabs.com within 30 days of account deletion. We will purge anonymized data records associated with your former account on request, subject to legal retention requirements.
+
+### 7.4 Restricting and revoking consent
+
+You can revoke any of the four consent scopes (Section 4) at any time in Settings → Privacy. Revoking consent does not retroactively undo data processing that occurred while consent was active, but it stops future processing under that scope.
+
+### 7.5 Objecting to processing
+
+You can object to specific uses of your data (e.g., inclusion in anonymous benchmarks) by toggling consents in Settings, or by contacting us at privacy@artemyxlabs.com for processing not covered by the consent scopes.
+
+### 7.6 Data portability
+
+Your data export (Section 7.1) is in JSON format suitable for porting to another service. Veris does not currently integrate with other consumer health platforms for direct data transfer; manual import to another service may require their support.
+
+### 7.7 Lodging a complaint
+
+If you believe we have mishandled your data, you may contact us first at privacy@artemyxlabs.com. If you are not satisfied with our response, you may have the right to lodge a complaint with a data protection authority in your jurisdiction (e.g., the ICO in the UK, your state Attorney General's office in the US).
+
+## 8. Children
+
+Veris is not intended for use by anyone under 18. We do not knowingly collect data from anyone under 18. If you believe a minor has provided us data, contact us at privacy@artemyxlabs.com and we will delete it promptly.
+
+## 9. International data transfers
+
+Veris's primary infrastructure is hosted in the United States (AWS us-west-2; Supabase us-west-1). If you access Veris from outside the United States, your data will be transferred to and processed in the United States. By using Veris, you consent to this transfer.
+
+For users in jurisdictions with specific data-transfer requirements (e.g., the European Economic Area, the United Kingdom): we rely on Standard Contractual Clauses or other approved transfer mechanisms with our service providers. Contact us for details.
+
+## 10. AI and automated decision-making
+
+Veris's AI agent makes recommendations and surfaces patterns based on your data. These recommendations are advisory only and do not produce legal effects on you. You can override, ignore, or dispute any agent recommendation. The agent does not autonomously make decisions that affect your finances, healthcare, or legal status.
+
+The agent may write structured observations to your profile, but only with your explicit confirmation for each one. You can edit or discard any agent-proposed observation before it is written.
+
+## 11. Changes to this policy
+
+We may update this Privacy Policy as Veris evolves. When we make material changes, we will:
+
+- Update the "Last updated" date at the top of this page
+- Notify you by email if you have an active account
+- For substantial changes affecting how we handle data, request re-consent before continuing to use your data under the new terms
+
+You can review prior versions of this policy on request to privacy@artemyxlabs.com.
+
+## 12. Contact us
+
+For privacy questions, requests, or complaints:
+
+**Email:** privacy@artemyxlabs.com
+
+For urgent security issues: security@artemyxlabs.com
+
+---
+
+*This policy describes Veris's current data handling practices. It is subject to legal review. If any provision is found to conflict with applicable law, that provision is severable and the remainder of the policy continues in effect.*
+`;
+
+const LEGAL_TERMS_MD = `# Veris Terms of Service
+
+**Effective date:** May 14, 2026
+**Last updated:** May 14, 2026
+
+## 1. Acceptance of these Terms
+
+By creating an account, accessing, or using Veris, you agree to be bound by these Terms of Service ("Terms") and Veris's Privacy Policy. If you do not agree, do not use Veris.
+
+These Terms form a legal agreement between you and **Artemyx Labs** ("we," "us," "our"), the operator of the Veris platform.
+
+## 2. Eligibility
+
+You must be at least 18 years old to use Veris. By creating an account, you represent that you are 18 or older.
+
+If you are using Veris in a jurisdiction where the legal age for entering contracts is higher than 18, you must meet that age.
+
+You must provide accurate, current information when creating your account, and you must keep that information up to date.
+
+## 3. What Veris is, and what Veris is not
+
+**Veris is:**
+- A wellness and personal-data platform that lets you track health and fitness data over time
+- A tool for organizing and visualizing your health data from many sources in one place
+- An AI-powered assistant that surfaces patterns in your data and answers questions about it
+- A delivery surface for coaching programs you may purchase from Cerus or other partners through the platform
+
+**Veris is not:**
+- A medical or healthcare service
+- A substitute for professional medical advice, diagnosis, or treatment
+- A licensed clinical practice or healthcare provider
+- A device approved by the FDA, EMA, or any regulatory authority
+
+**Important:** The information Veris provides — including agent responses, dashboard insights, scores, percentile comparisons, and recommendations — is for informational purposes only. **Always consult a qualified healthcare provider before making medical decisions, starting or stopping treatment, or making significant changes to your training, nutrition, or recovery practices.**
+
+If you are experiencing a medical emergency, **call 911 (US) or your local emergency services immediately.** Do not rely on Veris for emergency medical guidance.
+
+## 4. Your account
+
+### 4.1 Account creation
+
+You create your account using an email address and password. You are responsible for keeping your credentials secure. You are responsible for all activity under your account, whether or not authorized by you. Notify us immediately if you suspect unauthorized access.
+
+### 4.2 One person per account
+
+Veris accounts are personal to you. Do not share your account with anyone else. Do not create multiple accounts to circumvent platform limits.
+
+### 4.3 Account termination
+
+You may delete your account at any time via Settings → Data → Delete Account. Account deletion follows the tiered deletion model described in our Privacy Policy.
+
+We may suspend or terminate your account if you violate these Terms, engage in fraudulent or abusive behavior, or use Veris in a way that harms us, other users, or third parties. We will notify you of suspension or termination unless prohibited by law.
+
+## 5. Subscription and billing
+
+### 5.1 Beta period
+
+During the closed beta period, Veris is provided to selected users at no cost. We may collect feedback from beta users and use it to improve the product. Beta users may be transitioned to paid plans at the conclusion of beta with at least 14 days advance notice.
+
+### 5.2 Paid plans (when launched)
+
+When Veris launches paid plans:
+- Plans are billed monthly or annually as you select
+- Payment is processed by Stripe; their terms apply to payment processing
+- Subscriptions auto-renew unless canceled before the renewal date
+- You can cancel any time in Settings → Account → Manage Subscription
+- Cancellation takes effect at the end of the current billing period; we do not pro-rate refunds
+- We may change pricing with at least 30 days notice; you can cancel before the new price takes effect
+
+### 5.3 Coaching programs
+
+Veris may offer coaching programs (training plans, nutrition plans, recovery protocols, etc.) for purchase through the platform. These are provided either directly by Cerus or by third-party coaches partnered with Veris. Each program has its own terms, refund policy, and delivery commitment, presented at the time of purchase.
+
+### 5.4 Refunds
+
+Refund eligibility is described in your specific plan or program. Subscription fees are generally non-refundable. Coaching programs may have specific refund windows. Contact us at privacy@artemyxlabs.com for refund inquiries.
+
+## 6. The AI agent
+
+### 6.1 What the agent does
+
+Veris includes an AI assistant ("the agent") powered by Anthropic's Claude language model. The agent reads your observations to:
+- Answer your questions about your data
+- Surface patterns and trends
+- Propose observations to record on your behalf
+- Suggest, with your explicit consent, coaching plans relevant to your data
+
+### 6.2 Confirmation before writes
+
+The agent will not modify your profile data without your explicit confirmation. Every observation the agent proposes is presented as a confirmation card you can accept, edit, or discard.
+
+### 6.3 Limitations and accuracy
+
+The agent is an AI system. It can make mistakes. Specifically:
+- The agent may misunderstand your messages or extract incorrect data from screenshots
+- The agent's pattern recognition is informational, not diagnostic
+- The agent may surface correlations that are coincidental
+- The agent may say something that sounds confident but is wrong
+
+You are responsible for reviewing what the agent proposes before confirming. **The agent's outputs are not medical advice and should not be relied on for medical decisions.**
+
+If you believe the agent has made a significant error or proposed something harmful, please report it via the in-app feedback flow so we can investigate.
+
+### 6.4 Agent training
+
+Veris does not use your personal data to train the underlying Claude model. Anthropic's commercial terms apply to data sent to their API.
+
+## 7. Connected services and uploaded files
+
+### 7.1 Connections
+
+Veris allows you to connect third-party data sources (wearables, nutrition trackers, etc.) through Terra, our data aggregator. Each connection is voluntary and requires your authorization with the third-party service. You can disconnect any service at any time in Settings → Connections.
+
+The third-party services have their own terms and privacy policies, which apply to data flowing through them. Veris is not responsible for the practices of third-party services.
+
+### 7.2 Uploaded files
+
+You can upload files (lab reports, workout photos, screenshots) to Veris. By uploading a file, you represent that:
+- You own the file or have the right to upload it
+- The file does not contain content owned by others without permission
+- The file does not contain medical records of other people without their consent
+- The file does not contain illegal content
+
+We process uploaded files as described in our Privacy Policy. We will delete uploaded files when you delete your account, request deletion, or as part of routine purging of files unrelated to your active data.
+
+## 8. Acceptable use
+
+When using Veris, you agree not to:
+- Use Veris for any illegal purpose
+- Attempt to access another user's account or data without authorization
+- Reverse engineer, decompile, or attempt to extract source code from Veris
+- Bypass or attempt to bypass authentication, rate limits, or other technical controls
+- Use Veris to harass, threaten, or harm others
+- Upload malicious software, viruses, or other harmful code
+- Scrape, mine, or systematically extract data from Veris
+- Misrepresent yourself or your data
+- Use Veris to provide medical advice or healthcare services to other people without proper licensing
+- Resell, redistribute, or commercially exploit Veris's services without our written permission
+
+We reserve the right to suspend or terminate accounts that violate these rules.
+
+## 9. Intellectual property
+
+### 9.1 Our property
+
+Veris, the Veris brand, the Veris and Cerus logos, the platform's design, code, content, and proprietary algorithms are the property of Artemyx Labs (or our licensors). We grant you a limited, non-exclusive, non-transferable, revocable license to use Veris for personal use during the term of your account.
+
+### 9.2 Your data
+
+You retain ownership of all data you provide to Veris (observations, uploaded files, conversations with the agent). By using Veris, you grant us a license to process your data as described in the Privacy Policy and these Terms — solely to operate the service for you. We do not claim ownership of your data.
+
+### 9.3 Cerus Athlete 2.0 programming and other intellectual content
+
+Coaching programs delivered through Veris (including but not limited to Cerus Athlete 2.0 programming) are the intellectual property of their authors. You receive a license to use the programming for personal training during the term of your subscription. You may not reproduce, redistribute, or commercially exploit programming content without permission.
+
+## 10. Health and safety disclaimers
+
+### 10.1 No medical advice
+
+**Veris does not provide medical advice.** The information Veris provides is for general wellness and informational purposes only. Always consult a qualified healthcare provider for medical questions or before making changes to your health routine.
+
+### 10.2 Use at your own risk
+
+Training, nutrition, and recovery activities carry inherent risks. By using Veris's recommendations, programs, or insights, you accept those risks. **You are responsible for your own health, safety, and training decisions.** If you have a medical condition, are pregnant, are recovering from injury, or have any concerns about your fitness program, consult a qualified professional before acting on Veris's outputs.
+
+### 10.3 Eating, training, and mental health
+
+If Veris's data displays (calorie tracking, body composition metrics, performance comparisons, etc.) feel unhelpful or harmful to your wellbeing, you can disable specific features in Settings, contact us, or stop using Veris. We will work to provide options for de-emphasizing data displays that may not serve your wellbeing, but we cannot anticipate every individual situation.
+
+If you are experiencing thoughts of self-harm or struggling with disordered behavior, please reach out to a mental health professional or:
+- US: 988 Suicide and Crisis Lifeline
+- UK: Samaritans (116 123)
+- Or your local emergency services
+
+### 10.4 Children and minors
+
+Veris is not for use by anyone under 18. Do not let minors use your account. Do not enter data about minors into Veris.
+
+## 11. Disclaimers and limitation of liability
+
+### 11.1 As-is service
+
+VERIS IS PROVIDED "AS IS" AND "AS AVAILABLE." TO THE FULLEST EXTENT PERMITTED BY LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, OR UNINTERRUPTED OPERATION.
+
+WE DO NOT WARRANT THAT:
+- VERIS WILL BE FREE OF ERRORS, DEFECTS, OR INTERRUPTIONS
+- DATA STORED ON VERIS WILL NOT BE LOST OR CORRUPTED
+- THE AGENT'S OUTPUTS WILL BE ACCURATE OR APPROPRIATE FOR YOUR SITUATION
+- COHORT COMPARISONS, SCORES, OR PERCENTILES ARE STATISTICALLY VALID FOR YOUR USE CASE
+
+### 11.2 Limitation of liability
+
+TO THE FULLEST EXTENT PERMITTED BY LAW:
+
+ARTEMYX LABS, ITS OFFICERS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR USE OR INABILITY TO USE VERIS.
+
+OUR TOTAL LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATED TO VERIS SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNTS YOU PAID TO US IN THE 12 MONTHS BEFORE THE CLAIM AROSE, OR (B) ONE HUNDRED DOLLARS ($100 USD).
+
+Some jurisdictions do not allow certain limitations of liability. In those jurisdictions, our liability is limited to the maximum extent permitted.
+
+### 11.3 No liability for medical outcomes
+
+WE ARE NOT LIABLE FOR ANY MEDICAL, PHYSICAL, OR PSYCHOLOGICAL OUTCOMES RESULTING FROM YOUR USE OF VERIS, ITS AGENT, OR ITS RECOMMENDATIONS. YOU ASSUME ALL RESPONSIBILITY FOR HEALTH AND TRAINING DECISIONS YOU MAKE.
+
+## 12. Indemnification
+
+You agree to indemnify and hold Artemyx Labs harmless from any claims, damages, costs, or liabilities (including reasonable attorney's fees) arising from your use of Veris, your violation of these Terms, your violation of any third party's rights, or content you upload or submit.
+
+## 13. Modifications to the service
+
+We may modify, suspend, or discontinue Veris (or any part of it) at any time. We will provide reasonable notice for material changes that affect your use of the service.
+
+If we discontinue Veris entirely, we will give at least 60 days notice and provide an opportunity to export your data before service ends.
+
+## 14. Modifications to these Terms
+
+We may update these Terms as Veris evolves. When we make material changes, we will notify you by email and update the "Last updated" date. Continued use of Veris after changes take effect constitutes acceptance of the new Terms.
+
+If you do not agree to a change, you may cancel your account before the change takes effect.
+
+## 15. Governing law and disputes
+
+### 15.1 Governing law
+
+These Terms are governed by the laws of [State, US] without regard to conflict-of-law principles.
+
+### 15.2 Disputes
+
+Any dispute arising from these Terms or your use of Veris shall first be subject to good-faith negotiation. If unresolved within 30 days, disputes shall be resolved through binding individual arbitration administered by [arbitration organization] under their rules then in effect, in [city/jurisdiction].
+
+You agree that any arbitration or claim shall be conducted on an **individual basis**, not as a class action or representative proceeding.
+
+This arbitration provision does not prevent either party from seeking injunctive relief in court for misuse of intellectual property, breach of confidentiality, or similar matters where damages are insufficient.
+
+### 15.3 Severability
+
+If any provision of these Terms is found unenforceable, the remaining provisions continue in full effect.
+
+### 15.4 Waiver
+
+Our failure to enforce a right or provision is not a waiver of that right or provision.
+
+## 16. Contact us
+
+For questions about these Terms:
+
+**Email:** privacy@artemyxlabs.com
+
+For account or billing questions: [support email]
+
+---
+
+*These Terms were drafted from Veris's product design and operating model. They are subject to legal review prior to general availability. Specific provisions (governing law, arbitration, indemnification limits, age requirements) may need adjustment based on the jurisdictions Veris operates in and applicable consumer-protection law.*
+`;
+
+function LegalPage({ title, markdown, otherTitle, otherPath }) {
+  const isMobile = useIsMobile();
+  useEffect(() => {
+    document.title = `${title} — Artemyx Labs`;
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', `${title} for Veris, operated by Artemyx Labs.`);
+    window.scrollTo(0, 0);
+  }, [title]);
+  const html = (typeof window !== "undefined" && window.marked)
+    ? window.marked.parse(markdown, { gfm: true, breaks: false })
+    : "";
+  return (
+    <div style={{ minHeight: "100vh", background: T.bg, color: T.ink, display: "flex", flexDirection: "column" }}>
+      <header style={{ padding: isMobile ? "16px 20px" : "20px 48px", borderBottom: `1px solid ${T.rule}`, background: "rgba(245,245,247,0.97)", backdropFilter: "blur(16px)", position: "sticky", top: 0, zIndex: 10 }}>
+        <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: isMobile ? 10 : 14, textDecoration: "none", color: "inherit" }}>
+          <ArtemyxIcon size={isMobile ? 28 : 32} id="legalNavIcon" />
+          <ArtemyxWordmark size="sm" />
+        </a>
+      </header>
+      <main style={{ flex: 1, width: "100%", maxWidth: 720, margin: isMobile ? "32px auto" : "56px auto", padding: isMobile ? "0 24px" : "0 32px" }}>
+        <p style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 9, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: T.midTeal, marginBottom: 10 }}>
+          Legal · {title}
+        </p>
+        <div className="legal-content" dangerouslySetInnerHTML={{ __html: html }} />
+        <div style={{ marginTop: 48, paddingTop: 32, borderTop: `1px solid ${T.rule}`, display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
+          <a href={otherPath} style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, fontWeight: 500, letterSpacing: 1.5, textTransform: "uppercase", color: T.midTeal, textDecoration: "none", padding: "10px 22px", border: `1px solid ${T.midTeal}` }}>View {otherTitle} →</a>
+          <a href="/" style={{ fontFamily: "'Orbitron', sans-serif", fontSize: 10, fontWeight: 500, letterSpacing: 1.5, textTransform: "uppercase", color: T.muted, textDecoration: "none", padding: "10px 22px", border: `1px solid ${T.rule}` }}>← Back to Home</a>
+        </div>
+      </main>
+      <footer style={{ padding: isMobile ? "24px" : "28px 64px", borderTop: "1px solid rgba(226,232,240,0.06)", background: T.darkBg, display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 12 : 0, justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <ArtemyxIcon size={18} id="legalFooterIcon" />
+          <span style={{ fontFamily: "'Orbitron', sans-serif", fontWeight: 600, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(226,232,240,0.3)" }}>Artemyx Labs, LLC</span>
+        </div>
+        <span style={{ fontSize: 10, color: "rgba(226,232,240,0.2)" }}>© 2026 · Colorado</span>
+      </footer>
+    </div>
+  );
+}
+
 function App() {
+  // Path-based router. Renders LegalPage for /privacy and /terms; everything
+  // else gets the marketing landing. Keeping the router in its own component
+  // (separate from MarketingApp) is what lets the hooks inside MarketingApp
+  // stay before any early-return — React's Rules-of-Hooks requires hook
+  // calls to be unconditional and in the same order every render.
+  const path = typeof window !== "undefined"
+    ? window.location.pathname.replace(/\/+$/, "")
+    : "";
+  if (path === "/privacy") {
+    return <LegalPage title="Privacy Policy" markdown={LEGAL_PRIVACY_MD} otherTitle="Terms of Service" otherPath="/terms" />;
+  }
+  if (path === "/terms") {
+    return <LegalPage title="Terms of Service" markdown={LEGAL_TERMS_MD} otherTitle="Privacy Policy" otherPath="/privacy" />;
+  }
+  return <MarketingApp />;
+}
+
+function MarketingApp() {
   const [activeStudy, setActiveStudy] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
